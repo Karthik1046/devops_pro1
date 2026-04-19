@@ -1,0 +1,70 @@
+# WeatherSphere — Weather Dashboard
+
+Real-time weather dashboard built with **React + Vite**, deployed via **Jenkins Multibranch Pipeline** on **AWS EC2** using **Docker + Nginx**.
+
+## Features
+- 🌍 Real-time weather for any city worldwide
+- 🗺️ GPS geolocation support
+- 📅 5-day daily forecast
+- ⏰ 24-hour temperature chart (SVG)
+- 💧 Detailed weather metrics (pressure, humidity, visibility, sunrise/sunset)
+- 🌡️ Celsius / Fahrenheit toggle
+- 🎨 Glassmorphism dark UI with micro-animations
+- 🐳 Docker + Nginx deployment (no Node.js in production)
+- 🔄 Jenkins Multibranch CI/CD pipeline
+
+## Project Structure
+
+```
+devops_pro/
+├── Jenkinsfile            ← Jenkins Multibranch Pipeline (9 stages)
+├── DEPLOYMENT.md          ← Full setup & operations guide
+├── .env.example           ← Environment variable template
+└── app/
+    ├── Dockerfile         ← Multi-stage: Node builder → Nginx runtime
+    ├── nginx.conf         ← SPA routing + health check + caching
+    ├── vite.config.js     ← Vite + Vitest config
+    ├── package.json       ← React 18 + Axios + Vitest
+    ├── index.html         ← HTML entry point
+    └── src/
+        ├── App.jsx        ← Root component
+        ├── App.css        ← Design system
+        ├── main.jsx       ← React entry
+        ├── components/
+        │   ├── SearchBar.jsx
+        │   ├── CurrentWeather.jsx
+        │   ├── WeatherDetails.jsx
+        │   ├── ForecastCard.jsx
+        │   └── HourlyChart.jsx
+        ├── hooks/
+        │   └── useWeather.js
+        ├── services/
+        │   └── weatherApi.js
+        ├── utils/
+        │   └── helpers.js
+        └── __tests__/
+            └── helpers.test.js
+```
+
+## Quick Start (Local Dev)
+
+```bash
+# 1. Get a free API key from https://openweathermap.org/api
+# 2. Create app/.env from template
+cp .env.example app/.env
+# Edit app/.env and fill in VITE_WEATHER_API_KEY
+
+# 3. Install and run
+cd app
+npm install
+npm run dev          # → http://localhost:5173
+```
+
+## Branch Strategy
+
+| Branch | Environment | Port | Docker Tag |
+|--------|-------------|------|------------|
+| `dev`  | TEST        | 8080 | `test-<N>` |
+| `main` | PRODUCTION  | 80   | `prod-<N>` |
+
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for full Jenkins + EC2 setup instructions.
